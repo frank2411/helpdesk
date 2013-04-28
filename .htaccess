@@ -1,0 +1,13 @@
+SetEnv APPLICATION_ENV development 
+
+Options +FollowSymlinks
+RewriteEngine On
+
+#RewriteRule ^/sort/([a-z]+)/$ index.php?sort=$1 [NC]
+
+RewriteRule ^category/(.*)/$ index.php?sort=$1 [NC]
+RewriteRule ^post/([a-z]+)/id/([0-9]+)/$ index.php?action=$1&id=$2 [NC]
+RewriteRule ^post/(((.*)[-]?(.*)?)+)/$ index.php?single=$1 [NC]
+RewriteRule ^([Ll]ogin|[Rr]egister)/$ index.php?action=$1 [NC]
+
+#RewriteRule ^(login)/$ index.php?action=$1 [NC]

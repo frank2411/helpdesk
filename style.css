@@ -1,0 +1,37 @@
+*{padding:0px;margin:0px;font-family:arial,sans-serif,helvetica;}
+body{background:#999;}
+a{text-decoration:none;}
+.clear{clear:both;}
+.left{float:left;}
+.radius{border-radius:3px;}
+
+/*default containers*/
+.container{width:1000px;margin:0px auto;background:#fff;min-height:700px;}
+.footer{width:100%;background:#000;}
+.footerContent{width:1000px;margin:0px auto;min-height:200px;}
+.header{width:100%;background:#000;}
+.headerContent{width:1000px;margin:0px auto;height:50px;}
+.main{padding:10px;width:670px;}
+.sidebar{float:left;width:300px;margin-left:10px;}
+
+/*end of default containers*/
+
+/*header css*/
+.navigationButton {color: #FFFFFF;display: block;font-weight: bold;height: 50px;line-height: 50px;padding-left: 15px;padding-right: 15px;text-transform: uppercase;}
+.navigationButton:hover{background:#C7000A;}
+/*end of header css*/
+
+/*not approved list*/
+/*.notApprovedList{border:2px solid #C7000A;background:#FFBABE;padding:10px 5px;}*/
+.notApprovedList {background: none repeat scroll 0 0 #EEEEEE;border: 2px solid #CCCCCC;padding: 10px 5px;}
+.sectionTitle {color: #333333;font-size: 17px;font-weight: bold;margin-bottom: 10px;}
+.not_approved{padding-left:10px;}
+.post{margin-bottom:20px;}
+.postTitle {color: #000000;font-size: 15px;font-weight: bold;}
+.postText {font-size: 15px;padding-left: 20px;}
+span.counter{color:#C7000A;}
+a.approveButton {background: none repeat scroll 0 0 #039E10;color: #FFFFFF;display: inline-block;font-size: 13px;font-weight: bold;margin-left: 20px;margin-top: 5px;padding: 2px 8px;}
+a.deleteButton {background: none repeat scroll 0 0 #C7000A;color: #FFFFFF;display: inline-block;font-size: 13px;font-weight: bold;margin-left: 20px;margin-top: 5px;padding: 2px 8px;}
+span.approveButton {background: none repeat scroll 0 0 #039E10;color: #FFFFFF;display: inline-block;font-size: 13px;font-weight: bold;margin-left: 20px;margin-top: 5px;padding: 2px 8px;}
+span.deleteButton {background: none repeat scroll 0 0 #C7000A;color: #FFFFFF;display: inline-block;font-size: 13px;font-weight: bold;margin-left: 20px;margin-top: 5px;padding: 2px 8px;}
+/*end of not approved list*/
