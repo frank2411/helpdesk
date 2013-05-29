@@ -2,15 +2,15 @@
   <div class="headerContent">
     <div class="headerNavigation">
       <a class="navigationButton left" href="/">
-				Home page
+	Home page
       </a>
       <?php 
       $catList = $this->getCatList();
       foreach($catList as $category){
       ?>
-      <a class="navigationButton left" href="/category/<?php echo $category->cat_slug ?>/">
-				<?php echo $category->cat_name;?>
-      </a>
+	<a class="navigationButton left" href="/category/<?php echo $category->cat_slug ?>/">
+	  <?php echo $category->cat_name;?>
+	</a>
       <?php 
       }
       ?>
