@@ -150,6 +150,7 @@ class Desk {
   
   /*CONVERT ARRAY TO AN OBJECT*/
   function convertToObj($array) {
+    $object = new stdClass();
     foreach ($array as $key=>$value) {
       $object->$key = $value = is_array($value) ? $this->convertToObj($value) : $value;
     }
@@ -231,9 +232,7 @@ class Desk {
   private function dbConnect($host,$user,$pass,$dbName){    
     mysqli_connect($host,$user,$pass,$dbName);
   }
-  /*END OF FUNCTIONS FOR CUSTOM DB CONNECTION*/
-
-  
+  /*END OF FUNCTIONS FOR CUSTOM DB CONNECTION*/  
   
   
 }
