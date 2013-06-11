@@ -1,5 +1,5 @@
 <?php
-class Loader{
+class TemplateLoader{
 	
   static protected $instance = null;
   private $_templatePath = "";

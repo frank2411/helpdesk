@@ -11,7 +11,6 @@
   private $pass="admin";
   private $dbName="help_desk_db";
 
-
   //set db variable for custom db connection
   public function setDb($value){
     $this->dbName = $value;
@@ -49,4 +48,15 @@
     return $this->host;
   }
   //end of variables for db connections
+
+  /*FUNCTIONS FOR CUSTOM DB CONNECTION*/  
+  public function getDbConnection($host,$user,$pass,$dbName){
+    $this->dbConnect($host,$user,$pass,$dbName);
+  }
+  
+  private function dbConnect($host,$user,$pass,$dbName){    
+    mysqli_connect($host,$user,$pass,$dbName);
+  }
+  /*END OF FUNCTIONS FOR CUSTOM DB CONNECTION*/  
+
 

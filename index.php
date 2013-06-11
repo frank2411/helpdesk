@@ -1,6 +1,6 @@
 <?php
   
   //load application
-  require_once("config/autoloader.php");
+  require_once("Config/Bootstrap.php");
 
 ?>
