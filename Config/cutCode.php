@@ -59,4 +59,8 @@
   }
   /*END OF FUNCTIONS FOR CUSTOM DB CONNECTION*/  
 
+#RewriteCond %{REQUEST_URI} post/((.*)[-]?(.*)?)+/id/(.*)
+#RewriteRule ^post/([a-z]+)/id/([0-9]+)[\/]?$ index.php?action=$1&id=$2 
 
+#RewriteCond %{REQUEST_URI} /post/(.*)[\/]?
+#RewriteRule ^post/(.*)[\/]?$ index.php?single=$1 [NC]

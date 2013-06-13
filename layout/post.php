@@ -1,8 +1,6 @@
 <?php print_r($_GET); die(); ?>
 
-<?php
-  $post = $this->getPost();
-?>
+<?php $post = $this->getPost(); ?>
 
 <div class="postTitle"> 
   <?php echo $post->title; ?>
