@@ -39,8 +39,27 @@ class Desk {
   
   //catch the get request
   public function catchGetRequest(){
-    return $_GET;
+    return $_GET["request"];
   }
+  
+  public function getParams(){
+		$params = $_GET["params"];
+		preg_match('/([^\/].*[^\/])/i', $params, $results);
+		if(!empty($results[1])){
+			$params = str_replace("/"," ",$results[1]);
+			$params = explode(" ",$params);
+			return $params;
+		} else {
+			return false;
+		}
+	}
+	
+	//modify 
+	public function getParam($paramIndex){
+		$params = $this->getParams();
+		return $params[$paramIndex];
+		
+	}
   
   //gets head
   public function getHead($meta){	
@@ -107,22 +126,22 @@ class Desk {
   }
   
   public function getCurrentCatName(){
-    $request = $this->catchGetRequest();
-    $query = "SELECT cat_name FROM category_list WHERE cat_slug='".$request["sort"]."'";
+		$param = $this->getParam(0);
+    $query = "SELECT cat_name FROM category_list WHERE cat_slug='".$param."'";
     $row = $this->fetchRow($query);
     return $row->cat_name;
   }
   
   public function getCurrentPostTitle(){
-    $request = $this->catchGetRequest();
-    $query = "SELECT title FROM posts WHERE url='".$request["single"]."'";
+    $param = $this->getParam(0);
+    $query = "SELECT title FROM posts WHERE url='".$param."'";
     $row = $this->fetchRow($query);
     return $row->title;
   }
 
   public function getPost(){
-    $request = $this->catchGetRequest();
-    $query = "SELECT * FROM posts WHERE url='".$request["single"]."'";
+    $param = $this->getParam(0);
+    $query = "SELECT * FROM posts WHERE url='".$param."'";
     $post = $this->fetchRow($query);
     return $post;
   }
@@ -150,32 +169,37 @@ class Desk {
   
   public function isCategory(){
     $request = $this->catchGetRequest();
-    if ($request["sort"]) {return true;}
+    if ($request == "category") {return true;}
   }
   
   public function isSingle(){
     $request = $this->catchGetRequest();
-    if ($request["single"]) {return true;}
+    if ($request == "post") {return true;}
   }
   
   public function isLogin(){
     $request = $this->catchGetRequest();
-    if ($request["action"]=="login") {return true;}
+    if ($request =="login") {return true;}
   }
   
   public function isRegister(){
     $request = $this->catchGetRequest();
-    if ($request["action"]=="register") {return true;}
+    if ($request =="register") {return true;}
   }
 
   public function getPageTitle(){
     $request = $this->catchGetRequest();
     if (!$request){
-      echo "Home Page";
-    } else if ($this->isCategory()){
-      echo "Categoria >>".$this->getCurrentCatName(); 
+      echo "<div class=\"breadcrumb\">
+						<span class=\"crumb\">Home Page</span>
+						</div>";
+    } else if ($this->isCategory()){      
+      echo "<div class=\"breadcrumb\">
+							<span class=\"crumb\">Categoria</span>
+							<span class=\"crumb\">".$this->getCurrentCatName()."</span>
+						</div>"; 
     } else {
-      echo ucfirst($request["action"]);
+      echo ucfirst($request);
     }		
   }
 	

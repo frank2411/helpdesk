@@ -1,18 +1,20 @@
-<div class="notApprovedList radius">
+<div class="defaultWidgetGeneralContainer">
+	<div class="sectionTitle">
+    Lista non approvati
+  </div>
+	<div class="defaultWidgetContainer">
   <?php
     $toApprove  = $this->getNotApproved();
   ?>
-  <div class="sectionTitle">
-    Lista non approvati
-  </div>
+
 
   <?php
     $counter = 1;
     foreach ($toApprove as $post){ ?>
-      <div class="post not_approved post_id_<?php echo $post->id?>">
+      <div class="post-list not_approved post_id_<?php echo $post->id?>">
 	<div class="postTitle">
 	  <a href="/post/<?php echo $post->url ?>/">
-	    <?php echo "<span class=\"counter\" >".$counter." .</span> ".$post->title; ?>
+	    <?php echo $post->title; ?>
 	  </a>
 	</div>
 	<div class="postText">
@@ -23,8 +25,11 @@
 	<a class="deleteButton radius" href="/post/delete/id/<?php echo $post->id ?>/">Elimina Post</a>
 	*/
       ?>
+	<?php /*
 	<span class="approveButton radius <?php echo $post->id ?>">Approva Post</span>
 	<span class="deleteButton radius <?php echo $post->id ?>">Elimina Post</span>
+	*/ ?>
+	
       </div>
     <?php  
       $counter++;
@@ -35,4 +40,5 @@
     //print_r($singleStuff);
     
   ?>
+</div>
 </div>

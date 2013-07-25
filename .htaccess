@@ -1,23 +1,8 @@
-SetEnv APPLICATION_ENV development 
-
 Options +FollowSymlinks
 RewriteEngine On
-RewriteBase /
+#deny from all
 
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !index.php
-RewriteCond %{REQUEST_URI} !(.*)/$
-RewriteRule ^(.*)$ http://www.helpdesk.it/$1/ [L,R=301] 
+RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteCond %{REQUEST_URI} !(category|post)
-RewriteRule ^(.*?)/(.*)$ index.php?request=$1&params=$2 [NC,L]
-
-RewriteCond %{REQUEST_URI} /category/(.*)[\/]?
-RewriteRule ^category/(.*)/$ index.php?sort=$1 [NC]
-
-RewriteCond %{REQUEST_URI} /post/(.*)[\/]?
-RewriteRule ^post/((.*)[-]?(.*))/$ index.php?single=$1 [NC]
-
-RewriteRule ^([Ll]ogin|[Rr]egister)/$ index.php?action=$1 [NC]
-
-
+RewriteRule ^([a-zA-Z0-9-_\s]+)([\/a-zA-Z0-9-_\s]+)?$ index.php?request=$1&params=$2 [NC,L]

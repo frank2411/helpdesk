@@ -1,34 +1,49 @@
 *{padding:0px;margin:0px;font-family:arial,sans-serif,helvetica;}
-body{background:#999;}
-a{text-decoration:none;}
+body{background:url("images/Sfondo.jpg") repeat center;}
+a{text-decoration:none;color: #071D70;}
 .clear{clear:both;}
 .left{float:left;}
 .radius{border-radius:3px;}
 
 /*default containers*/
-.container{width:1000px;margin:0px auto;background:#fff;min-height:700px;}
-.footer{width:100%;background:#000;}
+.container{width:1000px;margin:0px auto;/*background:#fff;*/min-height:700px;}
+/*.footer{width:100%;background:#000;}*/
 .footerContent{width:1000px;margin:0px auto;min-height:200px;}
-.header{width:100%;background:#000;}
+.header{width:100%;background:#00cc00;}
 .headerContent{width:1000px;margin:0px auto;height:50px;}
 .main{padding:10px;width:670px;}
 .sidebar{float:left;width:300px;margin-left:10px;}
+.defaultWidgetGeneralContainer{}
+.defaultWidgetContainer {/*background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #00CC00;*/margin-bottom: 5px;padding: 10px;}
 
 /*end of default containers*/
 
 /*header css*/
 .navigationButton {color: #FFFFFF;display: block;font-weight: bold;height: 50px;line-height: 50px;padding-left: 15px;padding-right: 15px;text-transform: uppercase;}
-.navigationButton:hover{background:#C7000A;}
+.navigationButton:hover{background:#AEF26D;color:#fff;}
 /*end of header css*/
 
 /*not approved list*/
+
+
 /*.notApprovedList{border:2px solid #C7000A;background:#FFBABE;padding:10px 5px;}*/
-.notApprovedList {background: none repeat scroll 0 0 #EEEEEE;border: 2px solid #CCCCCC;padding: 10px 5px;}
-.sectionTitle {color: #333333;font-size: 17px;font-weight: bold;margin-bottom: 10px;}
-.not_approved{padding-left:10px;}
+.sectionTitle {
+background: none repeat scroll 0 0 #00CC00;
+border-radius: 5px 5px 0 0;
+color: #FFFFFF;
+font-size: 16px;
+font-weight: bold;
+padding: 5px 10px;
+text-align: center;
+}
+.breadcrumb{margin:10px 0px;}
+.crumb {background: none repeat scroll 0 0 #00CC00;color: #fff;display: inline-block;font-weight: bold;margin-right: 10px;padding: 5px;cursor:pointer;cursor:hand;}
+.crumb:hover{background: none repeat scroll 0 0 #AEF26D;}
+.post-list {background: none repeat scroll 0 0 #AEF26D;margin-bottom: 10px;margin-top: 10px;padding: 5px;}
+.not_approved{}
 .post{margin-bottom:20px;}
-.postTitle {color: #000000;font-size: 15px;font-weight: bold;}
-.postText {font-size: 15px;padding-left: 20px;}
+.postTitle {color: #000000;font-size: 15px;font-weight: bold;margin-bottom:4px;}
+.postText {font-size: 15px;}
 span.counter{color:#C7000A;}
 a.approveButton {background: none repeat scroll 0 0 #039E10;color: #FFFFFF;display: inline-block;font-size: 13px;font-weight: bold;margin-left: 20px;margin-top: 5px;padding: 2px 8px;}
 a.deleteButton {background: none repeat scroll 0 0 #C7000A;color: #FFFFFF;display: inline-block;font-size: 13px;font-weight: bold;margin-left: 20px;margin-top: 5px;padding: 2px 8px;}
