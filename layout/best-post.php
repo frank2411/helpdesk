@@ -1,1 +1,7 @@
-ciaooooooooooooooooooooooooooo
+<?php 
+
+	$this->getPageTitle();
+	$this->extension();
+
+
+?>

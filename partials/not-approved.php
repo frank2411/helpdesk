@@ -6,8 +6,6 @@
   <?php
     $toApprove  = $this->getNotApproved();
   ?>
-
-
   <?php
     $counter = 1;
     foreach ($toApprove as $post){ ?>

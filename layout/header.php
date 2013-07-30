@@ -8,8 +8,8 @@
       $catList = $this->getCatList();
       foreach($catList as $category){
       ?>
-	<a class="navigationButton left" href="/category/<?php echo $category->cat_slug ?>/">
-	  <?php echo $category->cat_name;?>
+	<a class="navigationButton left" href="/category/<?php echo $category->url ?>/">
+	  <?php echo $category->name;?>
 	</a>
       <?php 
       }

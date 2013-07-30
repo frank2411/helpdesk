@@ -2,6 +2,14 @@
 
 class Desk {
 
+	/*
+	 * 
+	 * campi tabelle : users => roles = admin | guest | moderator | writer
+	 * 							 : post => status = approved | waiting | flagged | depublished
+	 * 
+	 * 
+	*/
+
   const DEFAULT_JS_PATH = "/js/";
 
   //get default db connection
@@ -33,11 +41,126 @@ class Desk {
   
   public function insert($query){
     $result = mysqli_query($this->getDefaultDbConnection(),$query);
-  }  
+  }
+  
+	public function getPosts(){
+		if($this->isCategory()){			
+			$param = $this->getParam(0);
+			$param = mysql_real_escape_string($param);
+			$query = "
+				SELECT posts.*,categories.id,categories_relationship.*
+				FROM posts 
+				INNER JOIN (categories,categories_relationship)
+				ON (categories_relationship.post_id = posts.id AND categories_relationship.cat_id = categories.id )
+				WHERE categories.url = '".$param."' 
+				AND status = 'approved'
+			";
+			$row = $this->select($query);
+			return $row;
+		}
+	}
+	
+	/*
+	 * SELECT 
+			posts.*,
+			categories.id AS catId,
+			categories_relationship.*,
+			tags.name AS tagName,
+			tags.url AS tagUrl,
+			tags.id,
+			tags_relationship.tag_id
+			FROM posts 
+			INNER JOIN (categories,categories_relationship,tags,tags_relationship)
+			ON (
+			categories_relationship.post_id = posts.id 
+			AND 
+			categories_relationship.cat_id = categories.id 
+			AND 
+			tags.id = tags_relationship.tag_id
+			AND 
+			tags_relationship.post_id = posts.id
+			) WHERE posts.id = 2
+	*/
+	
+	public function getNotApproved(){	
+		$param = $this->getParam(0);
+		$param = mysql_real_escape_string($param);
+		$query = "
+			SELECT *
+			FROM posts 
+			WHERE status = 'waiting'
+			";
+		$row = $this->select($query);
+		return $row;
+	}
+	
+	public function getTags($postId){
+    $query = "
+			SELECT tags.name,tags.url,tags_relationship.* 
+			FROM tags
+			INNER JOIN tags_relationship ON tags.id = tags_relationship.tag_id
+			WHERE tags_relationship.post_id = '".$postId."'
+    ";
+    $row = $this->select($query);
+    return $row;
+		
+	}
+	
+  public function getCurrentCatName(){
+		$param = mysql_real_escape_string($this->getParam(0));
+    $query = "SELECT name FROM categories WHERE url='".$param."'";
+    $row = $this->fetchRow($query);
+    return $row->name;
+  }
+  
+  public function getCurrentPostTitle(){
+    $param = mysql_real_escape_string($this->getParam(0));
+    $query = "SELECT title FROM posts WHERE url='".$param."'";
+    $row = $this->fetchRow($query);
+    return $row->title;
+  }
+
+  public function getPost(){
+    $param = mysql_real_escape_string($this->getParam(0));
+    $query = "SELECT * FROM posts WHERE url='".$param."'";
+    $post = $this->fetchRow($query);
+    return $post;
+  }
+  
+	public function getCatList(){
+    $query = "SELECT * FROM categories";
+    $row = $this->select($query);
+    return $row;
+  }
+	public function getCatBySlug($slug){
+    $query = "SELECT * FROM category_list WHERE cat_slug='".$slug."'";
+    $row = $this->fetchRow($query);
+    return $row;
+  }
+  
+  public function getCatByName($name){
+    $query = "SELECT * FROM category_list WHERE cat_slug='".$name."'";
+    $row = $this->fetchRow($query);
+    return $row;
+  }
+
+  /*CONVERT ARRAY TO AN OBJECT*/
+  function convertToObj($array) {
+    $object = new stdClass();
+    //$object = (object)$array;
+    foreach ($array as $key=>$value) {
+      $object->$key = $value = is_array($value) ? $this->convertToObj($value) : $value;
+    }
+    return $object;
+  }
+  /*END OF CONVERT ARRAY TO AN OBJECT*/  
+  
+  
+  
   /*END OF QUERIES FUNCTIONS*/  
   
   
-  //catch the get request
+  //catch the get request and params functions
   public function catchGetRequest(){
     return $_GET["request"];
   }
@@ -57,10 +180,10 @@ class Desk {
 	//modify 
 	public function getParam($paramIndex){
 		$params = $this->getParams();
-		return $params[$paramIndex];
-		
+		return $params[$paramIndex];	
 	}
-  
+  //catch the get request and params functions
+	
   //gets head
   public function getHead($meta){	
    include("layout/head.php");    
@@ -100,66 +223,6 @@ class Desk {
   public function getWidget($path){
     include("partials/widgets/".$path.".php");
   }
-  
-  public function getNotApproved(){
-    $query = "SELECT * FROM not_approved";
-    $row = $this->select($query);
-    return $row;
-  }
-  
-  public function getCatList(){
-    $query = "SELECT * FROM category_list";
-    $row = $this->select($query);
-    return $row;
-  }
-  
-  public function getCatBySlug($slug){
-    $query = "SELECT * FROM category_list WHERE cat_slug='".$slug."'";
-    $row = $this->fetchRow($query);
-    return $row;
-  }
-  
-  public function getCatByName($name){
-    $query = "SELECT * FROM category_list WHERE cat_slug='".$name."'";
-    $row = $this->fetchRow($query);
-    return $row;
-  }
-  
-  public function getCurrentCatName(){
-		$param = $this->getParam(0);
-    $query = "SELECT cat_name FROM category_list WHERE cat_slug='".$param."'";
-    $row = $this->fetchRow($query);
-    return $row->cat_name;
-  }
-  
-  public function getCurrentPostTitle(){
-    $param = $this->getParam(0);
-    $query = "SELECT title FROM posts WHERE url='".$param."'";
-    $row = $this->fetchRow($query);
-    return $row->title;
-  }
-
-  public function getPost(){
-    $param = $this->getParam(0);
-    $query = "SELECT * FROM posts WHERE url='".$param."'";
-    $post = $this->fetchRow($query);
-    return $post;
-  }
-  
-  public function cutLongText(){}
-  
-  /*CONVERT ARRAY TO AN OBJECT*/
-  function convertToObj($array) {
-    $object = new stdClass();
-    //$object = (object)$array;
-    foreach ($array as $key=>$value) {
-      $object->$key = $value = is_array($value) ? $this->convertToObj($value) : $value;
-    }
-    return $object;
-  }
-  /*END OF CONVERT ARRAY TO AN OBJECT*/
-  
-
   
   /*PAGES FUNCTIONS*/
   public function isHome(){
@@ -210,7 +273,34 @@ class Desk {
   /*END OF PAGES FUNCTIONS*/
   
   
+  /*DA INTEGRARE*/
   
+	public function cutLongText(){}
+	  
+  /*
+		public function parsePermalink($permalink,$date)
+		{
+			$permalink = trim($permalink);
+			$permalinkBase = "/blog/";
+			$finalDate = preg_replace('/^(\d+)[-](\d+)(.*)/i', '$1/$2/', $date);			
+			$permalink =	str_replace(
+				array("."," :",":"," ,",","," ?","?","'","\""," "),
+				array("","","","","","","","","","-"),
+				$permalink
+			);
+			$permalink = strtolower($this->stripAccents($permalink));
+			return $permalinkBase.$finalDate.$permalink;		
+		}
+		
+		public function stripAccents($permalink){
+			setlocale(LC_ALL,'en_US.utf8');
+			$permalink = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $permalink);
+			return $permalink;
+		}  
+		* 
+		* 
+	*/
+
 }
 
 
