@@ -4,15 +4,14 @@ a{text-decoration:none;color: #071D70;}
 .clear{clear:both;}
 .left{float:left;}
 .radius{border-radius:3px;}
+.center{text-align:center;}
 .btn {display:inline-block;border:0px none;border-radius:3px;}
-.btn-new {
-background: none repeat scroll 0 0 #F60018;
-color: #FFFFFF;
-display: block;
-font-weight: bold;
-padding: 10px 0;
-text-align: center;
-}
+.btn-new {background: none repeat scroll 0 0 #F60018;color: #FFFFFF;display: block;font-weight: bold;padding: 10px 0;text-align: center;}
+.inputMiddle {border: 1px solid #CCCCCC;border-radius: 3px 3px 3px 3px;height: 25px;line-height: 25px;padding: 0 20px;}
+.extended{width:94%;}
+textarea.inputMiddle {height: 150px;padding: 0;resize: none;width: 100%;}
+.inputContainer {margin-bottom: 10px;}
+.inputLabel {font-size: 16px;font-weight: bold;margin-bottom: 5px;}
 
 
 

@@ -1,7 +1,8 @@
 <?php
 
 class Desk {
-
+	
+	private $_messages="";
 	/*
 	 * 
 	 * campi tabelle : users => roles = admin | guest | moderator | writer
@@ -156,7 +157,6 @@ class Desk {
   /*END OF CONVERT ARRAY TO AN OBJECT*/  
   
   
-  
   /*END OF QUERIES FUNCTIONS*/  
   
   
@@ -164,6 +164,10 @@ class Desk {
   public function catchGetRequest(){
     return $_GET["request"];
   }
+  
+  public function getPostRequest(){
+		return $_POST;
+	}
   
   public function getParams(){
 		$params = $_GET["params"];
@@ -269,6 +273,24 @@ class Desk {
   public function includeScript($name){
     echo '<script type="text/javascript" src="'.self::DEFAULT_JS_PATH.$name.'"></script>';
   }
+  
+  public function setMessages($messages) {
+		$messageFormatted = "";
+		if(is_array($messages)){
+			foreach ($messages AS $message){
+				$messageFormatted.= $message;
+			}			
+		} else {
+			$messageFormatted = $messages;
+		}
+		$this->_messages = $messageFormatted;
+	}
+  
+  public function getMessages(){
+		return $this->_messages;
+	}
+  
+  
 	
   /*END OF PAGES FUNCTIONS*/
   
