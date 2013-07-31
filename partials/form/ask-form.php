@@ -7,7 +7,7 @@
 	</div>
 	<div class="inputContainer">
 		<p class="inputLabel">Inserisci la tua domanda</p>
-		<textarea class="inputMiddle" name="text">    <?php echo $_POST["text"] ?></textarea>
+		<textarea class="inputMiddle" name="text"><?php echo $_POST["text"] ?></textarea>
 	</div>
 	<div class="inputContainer center">
 		<input class="btn" type="submit" value="invia" />
