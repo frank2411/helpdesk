@@ -16,7 +16,7 @@
 	  </a>
 	</div>
 	<div class="postText">
-	  <?php echo $post->post; ?>
+	  <?php echo $post->content; ?>
 	</div>
 	<?php /* 
 	<a class="approveButton radius" href="/post/approve/id/<?php echo $post->id ?>/">Approva Post</a>

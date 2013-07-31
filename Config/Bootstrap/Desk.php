@@ -19,11 +19,15 @@ class Desk {
     $user = DESK_USERNAME;
     $pass = DESK_DBPASSWD;
     $dbName = DESK_DBNAME;
-    return @mysqli_connect($host,$user,$pass,$dbName);
+    $dbCon = mysqli_connect($host,$user,$pass,$dbName);
+    if( function_exists('mysql_set_charset') ){
+			//mysqli_set_charset($dbCon, "utf8");
+		}
+		return $dbCon;
   }
   
   /*QUERIES FUNCTIONS*/
-  public function select($query){
+  public function query($query){
     $result = mysqli_query($this->getDefaultDbConnection(),$query);
     $results = array();
     while ($row = mysqli_fetch_assoc($result)){
@@ -44,6 +48,14 @@ class Desk {
     $result = mysqli_query($this->getDefaultDbConnection(),$query);
   }
   
+  public function insertPostInCategory($postUrl,$catId){
+		$postId = $this->getPostId($postUrl);
+		$query = "
+		INSERT INTO categories_relationship (post_id,cat_id)
+		VALUES ('".$postId->id."', '".$catId."')";
+		$this->insert($query);
+	}
+  
 	public function getPosts(){
 		if($this->isCategory()){			
 			$param = $this->getParam(0);
@@ -56,9 +68,20 @@ class Desk {
 				WHERE categories.url = '".$param."' 
 				AND status = 'approved'
 			";
-			$row = $this->select($query);
+			$row = $this->query($query);
 			return $row;
 		}
+	}
+	
+	public function getPostId($postUrl){
+		$postUrl = mysql_real_escape_string($postUrl);
+		$query = "
+			SELECT posts.id
+			FROM posts 
+			WHERE posts.url = '".$postUrl."'
+		";
+		$row = $this->fetchRow($query);
+		return $row;
 	}
 	
 	/*
@@ -91,7 +114,7 @@ class Desk {
 			FROM posts 
 			WHERE status = 'waiting'
 			";
-		$row = $this->select($query);
+		$row = $this->query($query);
 		return $row;
 	}
 	
@@ -102,7 +125,7 @@ class Desk {
 			INNER JOIN tags_relationship ON tags.id = tags_relationship.tag_id
 			WHERE tags_relationship.post_id = '".$postId."'
     ";
-    $row = $this->select($query);
+    $row = $this->query($query);
     return $row;
 		
 	}
@@ -130,7 +153,7 @@ class Desk {
   
 	public function getCatList(){
     $query = "SELECT * FROM categories";
-    $row = $this->select($query);
+    $row = $this->query($query);
     return $row;
   }
 	public function getCatBySlug($slug){
@@ -299,29 +322,39 @@ class Desk {
   
 	public function cutLongText(){}
 	  
-  /*
-		public function parsePermalink($permalink,$date)
-		{
-			$permalink = trim($permalink);
-			$permalinkBase = "/blog/";
-			$finalDate = preg_replace('/^(\d+)[-](\d+)(.*)/i', '$1/$2/', $date);			
-			$permalink =	str_replace(
-				array("."," :",":"," ,",","," ?","?","'","\""," "),
-				array("","","","","","","","","","-"),
-				$permalink
-			);
-			$permalink = strtolower($this->stripAccents($permalink));
-			return $permalinkBase.$finalDate.$permalink;		
-		}
+	public function parsePermalink($permalink)
+	{
+		$permalink = trim($permalink);
+		$permalink =	str_replace(
+			array("."," :",":"," ,",","," ?","?","'","\""," "),
+			array("","","","","","","","","","-"),
+			$permalink
+		);
+		$permalink = strtolower($this->stripAccents($permalink));
+		$permalink = $this->checkExistence($permalink);
+		//$finalDate = preg_replace('/^(\d+)[-](\d+)(.*)/i', '$1/$2/', $date);			
+		return $permalink;		
+	}
 		
-		public function stripAccents($permalink){
-			setlocale(LC_ALL,'en_US.utf8');
-			$permalink = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $permalink);
-			return $permalink;
-		}  
-		* 
-		* 
-	*/
+	public function checkExistence($permalink){
+		$query = "
+			SELECT count( posts.id ) as size
+			FROM posts
+			WHERE url LIKE '%".$permalink."%'
+		";
+		$count = $this->fetchRow($query);
+		if($count->size >= 1){
+			$permalink = $permalink."-".($count->size + 1);
+		}
+		return $permalink;
+	}
+		
+	public function stripAccents($permalink){
+		setlocale(LC_ALL,'en_US.utf8');
+		$permalink = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $permalink);
+		return $permalink;
+	}  
+
 
 }
 
