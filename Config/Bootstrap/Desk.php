@@ -57,20 +57,20 @@ class Desk {
 	}
   
 	public function getPosts(){
-		if($this->isCategory()){			
-			$param = $this->getParam(0);
-			$param = mysql_real_escape_string($param);
-			$query = "
-				SELECT posts.*,categories.id,categories_relationship.*
-				FROM posts 
-				INNER JOIN (categories,categories_relationship)
-				ON (categories_relationship.post_id = posts.id AND categories_relationship.cat_id = categories.id )
-				WHERE categories.url = '".$param."' 
-				AND status = 'approved'
-			";
-			$row = $this->query($query);
-			return $row;
-		}
+	  if($this->isCategory()){			
+	    $param = $this->getParam(0);
+	    $param = mysql_real_escape_string($param);
+	    $query = "		  
+	      SELECT posts.*,categories.id as catId,categories_relationship.*
+	      FROM posts 
+	      INNER JOIN (categories,categories_relationship)
+	      ON (categories_relationship.post_id = posts.id AND categories_relationship.cat_id = categories.id )
+	      WHERE categories.url = '".$param."'
+	      AND status = 'approved'
+	    ";
+	    $row = $this->query($query);
+	    return $row;
+	  }
 	}
 	
 	public function getPostId($postUrl){
@@ -317,9 +317,7 @@ class Desk {
 	
   /*END OF PAGES FUNCTIONS*/
   
-  
-  /*DA INTEGRARE*/
-  
+    
 	public function cutLongText(){}
 	  
 	public function parsePermalink($permalink)
