@@ -5,15 +5,21 @@ a{text-decoration:none;color: #071D70;}
 .left{float:left;}
 .radius{border-radius:3px;}
 .center{text-align:center;}
-.btn {display:inline-block;border:0px none;border-radius:3px;}
-.btn-new {background: none repeat scroll 0 0 #F60018;color: #FFFFFF;display: block;font-weight: bold;padding: 10px 0;text-align: center;}
+.btn {display:inline-block;border:0px none;/*border-radius:3px;*/}
+.btn-new {color: #FFFFFF;display: block;font-weight: bold;padding: 10px 0;text-align: center;}
+.btn-red{background: none repeat scroll 0 0 #FB000D;border:1px solid #FB000D;}
+.btn-red:hover{background: none repeat scroll 0 0 #BF3030;}
+.btn-black{background: none repeat scroll 0 0 #000;}
+.btn-green{background:#4AE83A;border:1px solid #4AE83A;}
+.btn-green:hover{background:#14D100;}
+
 .inputMiddle {border: 1px solid #CCCCCC;border-radius: 3px 3px 3px 3px;height: 25px;line-height: 25px;padding: 0 20px;}
 .extended{width:94%;}
 textarea.inputMiddle {height: 150px;padding: 0;resize: none;width: 100%;}
 .inputContainer {margin-bottom: 10px;}
 .inputLabel {font-size: 16px;font-weight: bold;margin-bottom: 5px;}
 
-
+/*COOL GREEN 0ACF00 42E73A 268E00 A61A00 F60018*/
 
 
 /*default containers*/
@@ -26,8 +32,8 @@ textarea.inputMiddle {height: 150px;padding: 0;resize: none;width: 100%;}
 .headerContent{width:1000px;margin:0px auto;height:50px;}
 .main{padding:10px;width:670px;}
 .sidebar{float:left;width:300px;margin-left:10px;margin-top:10px;}
-.defaultWidgetGeneralContainer{}
-.defaultWidgetContainer {background: none repeat scroll 0 0 #FFFFFF;border-radius: 0 0 3px 3px;box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);margin-bottom: 5px;padding: 10px;}
+.defaultWidgetGeneralContainer{margin-bottom: 5px;}
+.defaultWidgetContainer {background: none repeat scroll 0 0 #FFFFFF;border-radius: 0 0 3px 3px;box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);padding: 10px;}
 /*end of default containers*/
 
 /*header css*/

@@ -12,17 +12,7 @@
 				$this->validateData($post);
 			}
 		}
-	
-		public function getStatus()
-		{
-			return $this->_success;
-		}
-	
-		private function setStatus($status)
-		{
-			$this->_success = $status;
-		}
-		
+
 		public function validateData($post)
 		{
 			$messages = "";

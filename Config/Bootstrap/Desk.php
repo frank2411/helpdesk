@@ -2,7 +2,17 @@
 
 class Desk {
 	
-	private $_messages="";
+	private $_messages = "";
+	private $_success = false;
+	
+	/*
+	//public $user;
+	function __construct($user)
+	{
+		$this->user = $user;
+	}
+	*/
+
 	/*
 	 * 
 	 * campi tabelle : users => roles = admin | guest | moderator | writer
@@ -12,7 +22,13 @@ class Desk {
 	*/
 
   const DEFAULT_JS_PATH = "/js/";
-
+	
+	public function user()
+  {
+		global $user;
+		return $user;
+	}
+	
   //get default db connection
   private function getDefaultDbConnection(){
     $host = DESK_HOST;
@@ -25,6 +41,7 @@ class Desk {
 		}
 		return $dbCon;
   }
+
   
   /*QUERIES FUNCTIONS*/
   public function query($query){
@@ -40,8 +57,12 @@ class Desk {
   public function fetchRow($query){
     $result = mysqli_query($this->getDefaultDbConnection(),$query);
     $row = mysqli_fetch_assoc($result);
-    $result = $this->convertToObj($row);
-    return $result;
+    if(!empty($row)){
+			$result = $this->convertToObj($row);
+			return $result;
+		} else {
+			return false;
+		}
   }
   
   public function insert($query){
@@ -192,6 +213,16 @@ class Desk {
 		return $_POST;
 	}
   
+	public function getStatus()
+	{
+		return $this->_success;
+	}
+	
+	public function setStatus($status)
+	{
+		$this->_success = $status;
+	}
+		  
   public function getParams(){
 		$params = $_GET["params"];
 		preg_match('/([^\/].*[^\/])/i', $params, $results);
@@ -223,7 +254,7 @@ class Desk {
   
   //gets content
   public function getContent($templatePath){
-   include("layout/content.php");
+		include("layout/content.php");
   }
   
   //gets footer
