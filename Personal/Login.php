@@ -4,6 +4,10 @@
 	
 		function __construct()
 		{
+			if($this->user()->isLogged()){
+				header('Location:/');
+				//die();
+			}
 			$post = $this->getPostRequest();			
 			if($post["action"] == "login")
 			{
@@ -35,10 +39,9 @@
 				return false;			
 			} else {
 				$this->user()->setIdentity($identity->id,$post["username"],$identity->role);
-			}
-			
+				header('Location:/');
+			}			
 			$this->setStatus(true);
-			
 		}
 	
 		private function checkIdentity($username,$password)
@@ -60,4 +63,3 @@
 	}
 
 ?>
-

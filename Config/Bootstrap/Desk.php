@@ -82,12 +82,15 @@ class Desk {
 	    $param = $this->getParam(0);
 	    $param = mysql_real_escape_string($param);
 	    $query = "		  
-	      SELECT posts.*,categories.id as catId,categories_relationship.*
+	      SELECT posts.*,users.nickname AS postAuthor
 	      FROM posts 
-	      INNER JOIN (categories,categories_relationship)
-	      ON (categories_relationship.post_id = posts.id AND categories_relationship.cat_id = categories.id )
+	      INNER JOIN (categories,categories_relationship,users)
+	      ON (categories_relationship.post_id = posts.id 
+					AND categories_relationship.cat_id = categories.id 
+					AND users.id = posts.author)
 	      WHERE categories.url = '".$param."'
 	      AND status = 'approved'
+	      ORDER BY posts.id DESC
 	    ";
 	    $row = $this->query($query);
 	    return $row;
@@ -100,6 +103,17 @@ class Desk {
 			SELECT posts.id
 			FROM posts 
 			WHERE posts.url = '".$postUrl."'
+		";
+		$row = $this->fetchRow($query);
+		return $row;
+	}
+	
+	public function getUserByNickname($nickname){
+		$nickname = mysql_real_escape_string($nickname);
+		$query = "
+			SELECT users.id,users.role
+			FROM users
+			WHERE nickname = '".$nickname."'
 		";
 		$row = $this->fetchRow($query);
 		return $row;
@@ -383,7 +397,15 @@ class Desk {
 		$permalink = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $permalink);
 		return $permalink;
 	}  
-
+	
+	public function validateEmail($email){		
+		preg_match("/[a-zA-Z0-9._+-]+@[a-zA-Z0-9\._-]+[\.][a-zA-Z0-9]{2,4}/i", $email,$matches);
+		if( !$matches || $matches[0] != $email)  {
+			return false;
+		} else {
+			return true;
+		}			
+	}
 
 }
 

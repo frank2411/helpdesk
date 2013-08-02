@@ -11,6 +11,11 @@
     foreach ($posts as $post){ 
 			$tags = $this->getTags($post->id);
 	?>
+		<?php 
+			/*if($this->user()->getUserId() == $post->author){
+				echo "MIA";
+			}*/
+		?>
 		<div class="post-list not_approved post_id_<?php echo $post->id?>">
 			<div class="postTitle">
 				<a href="/post/<?php echo $post->url ?>/">
@@ -19,6 +24,9 @@
 			</div>
 			<div class="postText">
 				<?php echo $post->content; ?>
+			</div>
+			<div class="post-author">
+				<?php echo $post->postAuthor; ?>				
 			</div>
 			<div class="postTags">
 				<?php

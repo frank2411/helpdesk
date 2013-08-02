@@ -3,12 +3,15 @@
 	class Ask extends Desk {
 	
 		private $_success="";
-	
+		
 		function __construct()
 		{
+			if(!$this->user()->isLogged()){
+				header("Location:/login");
+			}
 			$post = $this->getPostRequest();			
 			if($post["action"] == "insert")
-			{				
+			{
 				$this->validateData($post);
 			}
 		}
@@ -34,7 +37,7 @@
 			$title = mysql_real_escape_string($post["title"]);
 			$content = mysql_real_escape_string($post["text"]);
 			$url = $this->parsePermalink(mysql_real_escape_string($post["title"]));
-			$author = mysql_real_escape_string($post["author_id"]);
+			$author = $this->user()->getUserId();
 			$this->insertNewPost($title,$content,$url,$author);
 			$category = $this->insertPostInCategory($url,mysql_real_escape_string($post["categories"]));			
 			$this->setStatus(true);

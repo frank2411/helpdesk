@@ -8,6 +8,7 @@
 		</div>
 		<?php
 			if($this->getStatus()){
+				echo "Login effettuato con successo !";
 			} else {
 				$this->getPartial("form/login-form",$vars);		
 			}

@@ -1,5 +1,5 @@
 <form action="" method="POST">
-	<input type="hidden" name="author_id" value="1" />
+	<input type="hidden" name="author_id" value="<?php echo $this->user()->getUserId() ?>" />
 	<input type="hidden" name="action" value="insert" />
 	<div class="inputContainer">
 		<p class="inputLabel">Inserisci un titolo</p>
