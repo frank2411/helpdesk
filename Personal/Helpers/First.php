@@ -1,29 +1,13 @@
 <?php 
-	class First	{
-	
-		public function hi()
-		{
-			die("aaaaaa");
-		}
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	}
 
-
-
-
-
-
+  class First	{
+  
+    public function hi()
+    {
+      die("aaaaaa");
+    }
+    
+  }
 
 
 ?>

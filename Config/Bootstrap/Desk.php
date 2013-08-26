@@ -2,32 +2,32 @@
 
 class Desk {
 	
-	private $_messages = "";
-	private $_success = false;
-	
-	/*
-	//public $user;
-	function __construct($user)
-	{
-		$this->user = $user;
-	}
-	*/
+  private $_messages = "";
+  private $_success = false;
+  
+  /*
+  //public $user;
+  function __construct($user)
+  {
+	  $this->user = $user;
+  }
+  */
 
-	/*
-	 * 
-	 * campi tabelle : users => roles = admin | guest | moderator | writer
-	 * 							 : post => status = approved | waiting | flagged | depublished
-	 * 
-	 * 
-	*/
+  /*
+   * 
+   * campi tabelle : users => roles = admin | guest | moderator | writer
+   * 							 : post => status = approved | waiting | flagged | depublished
+   * 
+   * 
+  */
 
   const DEFAULT_JS_PATH = "/js/";
 	
-	public function user()
+  public function user()
   {
-		global $user;
-		return $user;
-	}
+    global $user;
+    return $user;
+  }
 	
   //get default db connection
   private function getDefaultDbConnection(){
@@ -37,9 +37,9 @@ class Desk {
     $dbName = DESK_DBNAME;
     $dbCon = mysqli_connect($host,$user,$pass,$dbName);
     if( function_exists('mysql_set_charset') ){
-			//mysqli_set_charset($dbCon, "utf8");
-		}
-		return $dbCon;
+      //mysqli_set_charset($dbCon, "utf8");
+    }
+    return $dbCon;
   }
 
   
@@ -58,11 +58,11 @@ class Desk {
     $result = mysqli_query($this->getDefaultDbConnection(),$query);
     $row = mysqli_fetch_assoc($result);
     if(!empty($row)){
-			$result = $this->convertToObj($row);
-			return $result;
-		} else {
-			return false;
-		}
+      $result = $this->convertToObj($row);
+      return $result;
+    } else {
+      return false;
+    }
   }
   
   public function insert($query){
@@ -70,103 +70,102 @@ class Desk {
   }
   
   public function insertPostInCategory($postUrl,$catId){
-		$postId = $this->getPostId($postUrl);
-		$query = "
-		INSERT INTO categories_relationship (post_id,cat_id)
-		VALUES ('".$postId->id."', '".$catId."')";
-		$this->insert($query);
-	}
-  
-	public function getPosts(){
-	  if($this->isCategory()){			
-	    $param = $this->getParam(0);
-	    $param = mysql_real_escape_string($param);
-	    $query = "		  
-	      SELECT posts.*,users.nickname AS postAuthor
-	      FROM posts 
-	      INNER JOIN (categories,categories_relationship,users)
-	      ON (categories_relationship.post_id = posts.id 
-					AND categories_relationship.cat_id = categories.id 
-					AND users.id = posts.author)
-	      WHERE categories.url = '".$param."'
-	      AND status = 'approved'
-	      ORDER BY posts.id DESC
-	    ";
-	    $row = $this->query($query);
-	    return $row;
-	  }
-	}
-	
-	public function getPostId($postUrl){
-		$postUrl = mysql_real_escape_string($postUrl);
-		$query = "
-			SELECT posts.id
-			FROM posts 
-			WHERE posts.url = '".$postUrl."'
-		";
-		$row = $this->fetchRow($query);
-		return $row;
-	}
-	
-	public function getUserByNickname($nickname){
-		$nickname = mysql_real_escape_string($nickname);
-		$query = "
-			SELECT users.id,users.role
-			FROM users
-			WHERE nickname = '".$nickname."'
-		";
-		$row = $this->fetchRow($query);
-		return $row;
-	}
-	
-	/*
-	 * SELECT 
-			posts.*,
-			categories.id AS catId,
-			categories_relationship.*,
-			tags.name AS tagName,
-			tags.url AS tagUrl,
-			tags.id,
-			tags_relationship.tag_id
-			FROM posts 
-			INNER JOIN (categories,categories_relationship,tags,tags_relationship)
-			ON (
-			categories_relationship.post_id = posts.id 
-			AND 
-			categories_relationship.cat_id = categories.id 
-			AND 
-			tags.id = tags_relationship.tag_id
-			AND 
-			tags_relationship.post_id = posts.id
-			) WHERE posts.id = 2
-	*/
-	
-	public function getNotApproved(){	
-		$param = $this->getParam(0);
-		$param = mysql_real_escape_string($param);
-		$query = "
-			SELECT *
-			FROM posts 
-			WHERE status = 'waiting'
-			";
-		$row = $this->query($query);
-		return $row;
-	}
-	
-	public function getTags($postId){
+    $postId = $this->getPostId($postUrl);
     $query = "
-			SELECT tags.name,tags.url,tags_relationship.* 
-			FROM tags
-			INNER JOIN tags_relationship ON tags.id = tags_relationship.tag_id
-			WHERE tags_relationship.post_id = '".$postId."'
+    INSERT INTO categories_relationship (post_id,cat_id)
+    VALUES ('".$postId->id."', '".$catId."')";
+    $this->insert($query);
+  }
+  
+  public function getPosts(){
+    if($this->isCategory()){			
+      $param = $this->getParam(0);
+      $param = mysql_real_escape_string($param);
+      $query = "		  
+	SELECT posts.*,users.nickname AS postAuthor
+	FROM posts 
+	INNER JOIN (categories,categories_relationship,users)
+	ON (categories_relationship.post_id = posts.id 
+	AND categories_relationship.cat_id = categories.id 
+	AND users.id = posts.author)
+	WHERE categories.url = '".$param."'
+	AND posts.status = 'approved'
+	ORDER BY posts.id DESC
+      ";
+      $row = $this->query($query);
+      return $row;
+    }
+  }
+	
+  public function getPostId($postUrl){
+    $postUrl = mysql_real_escape_string($postUrl);
+    $query = "
+      SELECT posts.id
+      FROM posts 
+      WHERE posts.url = '".$postUrl."'
+    ";
+    $row = $this->fetchRow($query);
+    return $row;
+  }
+	
+  public function getUserByNickname($nickname){
+    $nickname = mysql_real_escape_string($nickname);
+    $query = "
+      SELECT users.id,users.role
+      FROM users
+      WHERE nickname = '".$nickname."'
+    ";
+    $row = $this->fetchRow($query);
+    return $row;
+  }
+	
+  /*
+  * SELECT 
+    posts.*,
+    categories.id AS catId,
+    categories_relationship.*,
+    tags.name AS tagName,
+    tags.url AS tagUrl,
+    tags.id,
+    tags_relationship.tag_id
+    FROM posts 
+    INNER JOIN (categories,categories_relationship,tags,tags_relationship)
+    ON (
+    categories_relationship.post_id = posts.id 
+    AND 
+    categories_relationship.cat_id = categories.id 
+    AND 
+    tags.id = tags_relationship.tag_id
+    AND 
+    tags_relationship.post_id = posts.id
+    ) WHERE posts.id = 2
+  */
+	
+  public function getNotApproved(){	
+    $param = $this->getParam(0);
+    $param = mysql_real_escape_string($param);
+    $query = "
+      SELECT *
+      FROM posts 
+      WHERE status = 'waiting'
     ";
     $row = $this->query($query);
     return $row;
-		
-	}
+  }
+	
+  public function getTags($postId){
+    $query = "
+      SELECT tags.name,tags.url,tags_relationship.* 
+      FROM tags
+      INNER JOIN tags_relationship ON tags.id = tags_relationship.tag_id
+      WHERE tags_relationship.post_id = '".$postId."'
+    ";
+    $row = $this->query($query);
+    return $row;
+  }
 	
   public function getCurrentCatName(){
-		$param = mysql_real_escape_string($this->getParam(0));
+    $param = mysql_real_escape_string($this->getParam(0));
     $query = "SELECT name FROM categories WHERE url='".$param."'";
     $row = $this->fetchRow($query);
     return $row->name;
@@ -186,12 +185,13 @@ class Desk {
     return $post;
   }
   
-	public function getCatList(){
+  public function getCatList(){
     $query = "SELECT * FROM categories";
     $row = $this->query($query);
     return $row;
   }
-	public function getCatBySlug($slug){
+  
+  public function getCatBySlug($slug){
     $query = "SELECT * FROM category_list WHERE cat_slug='".$slug."'";
     $row = $this->fetchRow($query);
     return $row;
@@ -224,36 +224,36 @@ class Desk {
   }
   
   public function getPostRequest(){
-		return $_POST;
-	}
+    return $_POST;
+  }
   
-	public function getStatus()
-	{
-		return $this->_success;
-	}
+  public function getStatus()
+  {
+    return $this->_success;
+  }
 	
-	public function setStatus($status)
-	{
-		$this->_success = $status;
-	}
+  public function setStatus($status)
+  {
+    $this->_success = $status;
+  }
 		  
   public function getParams(){
-		$params = $_GET["params"];
-		preg_match('/([^\/].*[^\/])/i', $params, $results);
-		if(!empty($results[1])){
-			$params = str_replace("/"," ",$results[1]);
-			$params = explode(" ",$params);
-			return $params;
-		} else {
-			return false;
-		}
-	}
+    $params = $_GET["params"];
+    preg_match('/([^\/].*[^\/])/i', $params, $results);
+    if(!empty($results[1])){
+      $params = str_replace("/"," ",$results[1]);
+      $params = explode(" ",$params);
+      return $params;
+    } else {
+      return false;
+    }
+  }
 	
-	//modify 
-	public function getParam($paramIndex){
-		$params = $this->getParams();
-		return $params[$paramIndex];	
-	}
+  //modify 
+  public function getParam($paramIndex){
+    $params = $this->getParams();
+    return $params[$paramIndex];	
+  }
   //catch the get request and params functions
 	
   //gets head
@@ -268,7 +268,7 @@ class Desk {
   
   //gets content
   public function getContent($templatePath){
-		include("layout/content.php");
+    include("layout/content.php");
   }
   
   //gets footer
@@ -326,13 +326,13 @@ class Desk {
     $request = $this->catchGetRequest();
     if (!$request){
       echo "<div class=\"breadcrumb\">
-						<span class=\"crumb\">Home Page</span>
-						</div>";
+	      <span class=\"crumb\">Home Page</span>
+	    </div>";
     } else if ($this->isCategory()){      
       echo "<div class=\"breadcrumb\">
-							<span class=\"crumb\">Categoria</span>
-							<span class=\"crumb\">".$this->getCurrentCatName()."</span>
-						</div>"; 
+	      <span class=\"crumb\">Categoria</span>
+	      <span class=\"crumb\">".$this->getCurrentCatName()."</span>
+	    </div>"; 
     } else {
       echo ucfirst($request);
     }		
@@ -343,69 +343,69 @@ class Desk {
   }
   
   public function setMessages($messages) {
-		$messageFormatted = "";
-		if(is_array($messages)){
-			foreach ($messages AS $message){
-				$messageFormatted.= $message;
-			}			
-		} else {
-			$messageFormatted = $messages;
-		}
-		$this->_messages = $messageFormatted;
-	}
+    $messageFormatted = "";
+    if(is_array($messages)){
+      foreach ($messages AS $message){
+	$messageFormatted.= $message;
+      }			
+    } else {
+      $messageFormatted = $messages;
+    }
+    $this->_messages = $messageFormatted;
+  }
   
   public function getMessages(){
-		return $this->_messages;
-	}
+    return $this->_messages;
+  }
   
   
 	
   /*END OF PAGES FUNCTIONS*/
-  
-    
-	public function cutLongText(){}
+
+
+  public function cutLongText(){}
 	  
-	public function parsePermalink($permalink)
-	{
-		$permalink = trim($permalink);
-		$permalink =	str_replace(
-			array("."," :",":"," ,",","," ?","?","'","\""," "),
-			array("","","","","","","","","","-"),
-			$permalink
-		);
-		$permalink = strtolower($this->stripAccents($permalink));
-		$permalink = $this->checkExistence($permalink);
-		//$finalDate = preg_replace('/^(\d+)[-](\d+)(.*)/i', '$1/$2/', $date);			
-		return $permalink;		
-	}
+  public function parsePermalink($permalink)
+  {
+    $permalink = trim($permalink);
+    $permalink =	str_replace(
+      array("."," :",":"," ,",","," ?","?","'","\""," "),
+      array("","","","","","","","","","-"),
+      $permalink
+    );
+    $permalink = strtolower($this->stripAccents($permalink));
+    $permalink = $this->checkExistence($permalink);
+    //$finalDate = preg_replace('/^(\d+)[-](\d+)(.*)/i', '$1/$2/', $date);			
+    return $permalink;		
+  }
 		
-	public function checkExistence($permalink){
-		$query = "
-			SELECT count( posts.id ) as size
-			FROM posts
-			WHERE url LIKE '%".$permalink."%'
-		";
-		$count = $this->fetchRow($query);
-		if($count->size >= 1){
-			$permalink = $permalink."-".($count->size + 1);
-		}
-		return $permalink;
-	}
+  public function checkExistence($permalink){
+    $query = "
+      SELECT count( posts.id ) as size
+      FROM posts
+      WHERE url LIKE '%".$permalink."%'
+    ";
+    $count = $this->fetchRow($query);
+    if($count->size >= 1){
+      $permalink = $permalink."-".($count->size + 1);
+    }
+    return $permalink;
+  }
 		
-	public function stripAccents($permalink){
-		setlocale(LC_ALL,'en_US.utf8');
-		$permalink = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $permalink);
-		return $permalink;
-	}  
+  public function stripAccents($permalink){
+    setlocale(LC_ALL,'en_US.utf8');
+    $permalink = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $permalink);
+    return $permalink;
+  }  
 	
-	public function validateEmail($email){		
-		preg_match("/[a-zA-Z0-9._+-]+@[a-zA-Z0-9\._-]+[\.][a-zA-Z0-9]{2,4}/i", $email,$matches);
-		if( !$matches || $matches[0] != $email)  {
-			return false;
-		} else {
-			return true;
-		}			
-	}
+  public function validateEmail($email){		
+    preg_match("/[a-zA-Z0-9._+-]+@[a-zA-Z0-9\._-]+[\.][a-zA-Z0-9]{2,4}/i", $email,$matches);
+    if( !$matches || $matches[0] != $email)  {
+      return false;
+    } else {
+      return true;
+    }			
+  }
 
 }
 

@@ -1,5 +1,5 @@
 <div class="defaultWidgetGeneralContainer">
-	<div class="sectionTitle">
+  <div class="sectionTitle">
     Lista non approvati
   </div>
 	<div class="defaultWidgetContainer">

@@ -1,7 +1,7 @@
 <?php 
 
-	$this->getPageTitle();
-	$this->extension();
+  $this->getPageTitle();
+  $this->extension();
 
 
 ?>

@@ -1,13 +1,13 @@
 <?php
 
   require_once("Config.php");
-	require_once("Users.php");
+  require_once("Users.php");
   
   //session handler class
   $user = new Users();
   
-	$paths = array(APPLICATION_PATH,HELPERS_PATH,CURRENT_PATH);
-	set_include_path(implode($paths,PATH_SEPARATOR));
+  $paths = array(APPLICATION_PATH,HELPERS_PATH,CURRENT_PATH);
+  set_include_path(implode($paths,PATH_SEPARATOR));
 		
   require_once("Desk.php");
   require_once("TemplateLoader.php");
@@ -20,8 +20,8 @@
   //$ClassLoader = ClassLoader::getInstance($Load,$user)->loadPersonalClass();
   $ClassLoader = ClassLoader::getInstance($Load)->loadPersonalClass();
   if ($ClassLoader){
-		$Desk = $ClassLoader;
-	}
+    $Desk = $ClassLoader;
+  }
   $Desk->getHead($request);
   $Desk->getContent($Load);
 	
