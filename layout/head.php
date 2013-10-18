@@ -17,7 +17,8 @@
       <?php } ?>
 	<link href="/style.css" rel="stylesheet" type="text/css">
 	<?php $this->includeScript("jquery"); ?>
-	<?php $this->includeScript("post-actions"); ?>
+  <?php $this->includeScript("post-actions"); ?>
+  <?php $this->includeScript("confirm.js"); ?>
     </head>
   
    
