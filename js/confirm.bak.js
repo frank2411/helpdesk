@@ -1,91 +1,147 @@
-function Confirm(obj){
-  this.elementId;
-  this.buttonTrue;
-  this.buttonFalse;
-  this.open;
-  this.msg;
+function Modal(options){
+  if(this === window){
+    var Modal = new ModalObj(options);
+    return Modal;
+  }
 }
 
-Confirm.Prepare = function(obj){
-  var ConfirmBox = new Confirm();
-  ConfirmBox.ConfirmPrepare(obj);
-  return ConfirmBox;
+function ModalObj(options){
+  this.id = options.id;
+  this.class = options.class;
+  this.message = options.message;
+  this.html = options.html;
+  this.bindedElm;
+  this.eventToBind = "click";
+  this.onclose = options.onClose;
+  this.width = options.width;
+  this.height = options.height;
+  //this.onopen = options.onOpen;
+  this.insertNodeValue = options.insertNodeValue;
+  this.elmValue;
+  this.Init();
 }
 
-Confirm.prototype.ConfirmPrepare = function(obj) {
+ModalObj.prototype.Init = function() {
 
-  this.elementId = obj.elementId;
-  this.buttonTrue = obj.buttonTrue;
-  this.buttonFalse = obj.buttonFalse;
-  this.open = obj.open;
-  this.msg = obj.message;
-  this.userChoise = false;
-  this.onClose = obj.onClose;
+  var body = document.body;
   var self = this;
 
-  this.bind = function(){
-    this.elementBinded = document.getElementById(this.elementId);
-    this.onclick();
-  }
-
-  this.openConfirm = function(){
-    this.removeConfirm();
-    var body = document.body;
-    var confirmContainer = document.createElement("div");
-    confirmContainer.className = "confirmContainer";
-    confirmContainer.innerHTML = this.msg+"\
-      <button data-confirm=\"yes\" >"+this.buttonTrue+"</button>\
-      <button data-confirm=\"no\" >"+this.buttonFalse+"</button>";
-    body.appendChild(confirmContainer);
-    this.buttons = body.getElementsByTagName("button");
-    this.addButtonsOnclick();
-  }
-
-  this.addButtonsOnclick = function(){
-    for(var i=0;i<this.buttons.length;i++){
-      if(this.buttons[i].hasAttribute("data-confirm")){
-        if (this.buttons[i].addEventListener) {
-          this.buttons[i].addEventListener("click",function(e){self.choice(self,e);},false);
-        } else if (this.buttons[i].attachEvent) {
-          this.buttons[i].attachEvent('onclick', function(){self.choice(self,e)});
-        }
+  this.open = function(self,e){
+    this.startELm = e.target;
+    this.setNodeValue();
+    this.removeModal();
+    var modalHtml = document.createElement("div");
+    modalHtml.className = "modal modal-container modal-traditional";
+    var pMsg = document.createElement("p");
+    pMsg.className = "modal-title";
+    pMsg.innerHTML = this.message;
+    modalHtml.appendChild(pMsg);
+    
+    if(this.html){
+      /* ==== HACK TO INCLUDE ALL CUSTOM HTML IN MODAL WINDOW LIKE JQUERY .APPEND() ==== */
+      var temp = document.createElement("temp");
+      temp.innerHTML = this.html;
+      temp = temp.childNodes;
+      var fragment = document.createDocumentFragment();
+      for(i = 0; i < temp.length; i++){
+        var clone = temp[i].cloneNode(true);
+        fragment.appendChild(clone);      
       }
+      modalHtml.appendChild(fragment);
     }
+
+    var divButtons = document.createElement("div");
+    divButtons.innerHTML = "<button data-confirm=\"yes\" >Ok</button>\
+                            <button data-confirm=\"no\" >No</button>";
+    modalHtml.appendChild(divButtons);
+    this.bindButtonEvent(divButtons);
+    body.appendChild(modalHtml);
+    this.calculateSizes(modalHtml);//give custom size to modal
   }
 
-  this.sendUserChoise = function(){
-    console.log(this.userChoise);  
+  this.buttonsActions = function(self,e){
+    this.removeModal();
+    this.clickedButton = e.target;
+    this.choise = this.clickedButton.getAttribute("data-confirm");
+    this.onclose(this.startELm);
   }
 
-
-  this.choice = function(self,e){
-    this.choiseMade = e.target.getAttribute("data-confirm");
-    this.userChoise = this.choiseMade == "yes" ? true : false;
-    this.removeConfirm();
-    this.onClose();
+  this.removeNode = function(){
+    this.startELm.parentNode.removeChild(this.startELm);
   }
 
-  //remove alredy opened confirm
-  this.removeConfirm = function(){
-    body = document.body;
+  this.removeModal = function(){
     divs = body.getElementsByTagName("div");
     for (i = 0; i < divs.length ; i++) {
-      if(divs[i].className == "confirmContainer"){
+      if(divs[i].className == "modal modal-container modal-traditional"){
         divs[i].parentNode.removeChild(divs[i]);
       }
     }
   }
 
-  this.onclick = function(){
-    if (this.elementBinded.addEventListener) {
-      this.elementBinded.addEventListener("click",function(e){self.openConfirm(self,e);},false);
-    } else if (this.elementBinded.attachEvent) {
-      this.elementBinded.attachEvent('onclick', function(){self.openConfirm(self)});
+  this.bind = function(){
+    if(this.id){
+      this.bindedElm = document.getElementById(this.id);
+      this.bindIdEvent();
+    } else if(this.class){
+      this.bindendElements = document.querySelectorAll("."+this.class);
+      this.bindClassEvent();
     }
   }
 
+  this.bindClassEvent = function(){
+    for(i = 0; i < this.bindendElements.length;i++){
+      this.bindendElements[i].onclick = function(e){self.open(self,e);};
+    }
+  }
+
+  this.bindIdEvent = function(){
+    if(this.bindedElm.addEventListener) {
+      this.bindedElm.addEventListener('click', function(e){self.open(self,e);}, false);
+    } else if(this.bindedElm.attachEvent) {
+      this.bindedElm.attachEvent('onclick', function(e){self.open(self,e);});
+    }
+  }
+
+  this.bindButtonEvent = function(divButtons){
+    var buttons = divButtons.getElementsByTagName("button");
+    for(i = 0; i < buttons.length;i++){
+      buttons[i].onclick = function(e){self.buttonsActions(self,e);};
+    }
+  }
+
+  this.calculateSizes = function(modalHtml) {
+
+    if(this.width){
+      var marginLeft = Math.abs(this.width / 2 );
+    } else {
+      var width = modalHtml.offsetWidth;
+      var marginLeft = Math.abs(width / 2 );
+    }
+
+    if(this.height){
+      var marginTop = Math.abs(this.height / 2 );;
+    } else {
+      var height = Math.abs(modalHtml.offsetHeight);
+      var marginTop = Math.abs(height / 2 );
+    }
+
+    modalHtml.style.marginLeft = (-marginLeft+"px");
+    modalHtml.style.marginTop = (-marginTop+"px");
+    modalHtml.style.width = this.width+"px";
+    modalHtml.style.height = this.height+"px";
+    modalHtml.style.visibility = "visible";
+  }
+
+  this.setNodeValue = function(){
+    this.elmValue = this.startELm.innerHTML;
+  }
+
+  this.getNodeValue = function(){
+    return this.elmValue;
+  }
+  
   this.bind();
 
-};
 
-//window.ConfirmBox = new Confirm();
+}
